@@ -1,0 +1,14 @@
+.bounding-box{
+    position: absolute;
+    box-shadow: 0 0 3px #3a3ea4;
+    border: 3px solid rgb(61, 113, 173);
+    display: -webkit-box;
+    display: -moz-box;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    cursor: pointer;
+}
