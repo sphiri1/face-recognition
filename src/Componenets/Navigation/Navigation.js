@@ -8,7 +8,6 @@ const Navigation = ({onRouteChange, isSignedIn}) =>{
         const auth = getAuth();
         signOut(auth).then(() => {
             onRouteChange('signout');
-            console.log(auth.currentUser);
         }).catch((error) => {
             console.log(error);
         });

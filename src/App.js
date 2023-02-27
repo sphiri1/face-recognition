@@ -11,7 +11,7 @@ import SignIn from './Componenets/SignIn/SignIn';
 import Register from './Componenets/Register/Register';
  
 const app = new Clarifai.App({
-  apiKey: 'API-KEY HERE'
+  apiKey: 'daa8741eea4f429b9f3efdd4dc7c5061'
 });
 
 class App extends Component{
@@ -42,41 +42,33 @@ class App extends Component{
 
    displayFaceBox = (grid) =>{
     this.setState({box: grid});
+    this.setState({entry: 0});
    }
 
    onInputChange = (event) =>{
     this.setState({input: event.target.value});
    }
 
-//    getDocumentId = async () => {
-//     const docSnap = await getDocs(db);
-//     docSnap.forEach((querySnapshot) => {
-//         this.setState({id: querySnapshot.data()});
-//     });
-// } 
-  //  updateEntries = async () =>{
-  //   this.getDocumentId();
-  //   console.log(this.state.id + " hey");
-  //   const entriesRef = doc(firestore, "users", this.state.id);
-  //   await updateDoc(entriesRef, {
-  //     'entries': increment(1)
-  //   })
-  //  }
 
    onButtonSubmit = () =>{
+    if(this.state.input){
     this.setState({ImageUrl: this.state.input});
     this.setState({entry: this.state.entry + 1});
-
+    
     app.models.predict({
       id: "face-detection",
      version: "6dc7e46bc9124c5c8824be4822abe105"
     },this.state.input)
     .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
     .catch(err => console.log(err));
+  }else{
+    alert("Please enter an image url");
+  }
    }
 
    onRouteChange = (route) =>{
     if(route === 'signout'){
+      this.setState({input: '', box: {}, ImageUrl: ''});
       this.setState({isSignedIn: false})
     }else if(route === 'home'){
       this.setState({isSignedIn: true})
@@ -85,20 +77,23 @@ class App extends Component{
    }
 
   render(){
-    const { isSignedIn, ImageUrl, route, box } = this.state;
+    const { isSignedIn, ImageUrl, route, box, entry } = this.state;
     return (
     <div className="App">
       <Particles
       color="#15314e"
       type='cobweb' 
       bg={true}/>
-     <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
+          />
      {
         route === 'home' 
       ? <div>
         <Logo/>
         <Rank 
-         entry={this.state.entry}/>
+         entry={entry}/>
         <ImageLinkForm 
          onInputChange={this.onInputChange} 
          onButtonSubmit={this.onButtonSubmit}/>

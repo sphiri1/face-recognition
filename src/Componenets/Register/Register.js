@@ -1,6 +1,6 @@
 import React , { Component } from "react";
 import { db } from "../../firebase";
-import { addDoc } from "@firebase/firestore";
+import { setDoc, doc } from "@firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 
@@ -38,8 +38,8 @@ class Register extends Component {
             .then(() => {
                 updateProfile(auth.currentUser, {
                  displayName: data.name
-                }).then(() => {  
-                addDoc(db, data);
+                }).then(async () => {  
+                await setDoc(doc(db, auth.currentUser.uid), {...data});
                 this.props.onRouteChange('home');
                 });
             })
