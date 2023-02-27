@@ -1,6 +1,6 @@
 import React from "react";
 import { getAuth } from "firebase/auth";
-import { getDocs, increment, updateDoc, doc } from "firebase/firestore";
+import { getDocs, updateDoc, doc } from "firebase/firestore";
 import { db , firestore} from "../../firebase";
 import { useState, useEffect } from "react";
 
@@ -23,8 +23,9 @@ const Rank =  ({ entry }) =>{
         const addEntry = async () => {
             const entriesRef = doc(firestore, "users", id);
             if(entry > 0){
+                let counter = entries + 1;
             await updateDoc(entriesRef, {
-              'entries': increment(1)
+              'entries': counter
             })
             getEntries();
         }
