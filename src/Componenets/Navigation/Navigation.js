@@ -1,11 +1,24 @@
 import React  from 'react';
 import 'tachyons';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Navigation = ({onRouteChange, isSignedIn}) =>{
+
+    const onSignOut = () =>{
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            onRouteChange('signout');
+            console.log(auth.currentUser);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+
         if(isSignedIn){
         return(
             <nav style={{display : 'flex', justifyContent: 'flex-end'}}>
-            <p onClick={() => onRouteChange('signout')} className='ma0 f3 link din black underline pa3 pointer'>Sign Out</p>
+            <p onClick={onSignOut} className='ma0 f3 link din black underline pa3 pointer'>Sign Out</p>
         </nav>
         )
         }else{

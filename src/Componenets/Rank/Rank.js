@@ -1,13 +1,47 @@
 import React from "react";
+import { getAuth } from "firebase/auth";
+import { getDocs, increment, updateDoc, doc } from "firebase/firestore";
+import { db , firestore} from "../../firebase";
+import { useState, useEffect } from "react";
 
-const Rank = () =>{
+
+const Rank =  ({ entry }) =>{
+    const auth = getAuth();
+    const name = auth.currentUser ? auth.currentUser.displayName : "Not signed in";
+    const [entries, setEntries] = useState(0);
+    const [id, setId] = useState('');
+
+    useEffect(()=>{
+        const getEntries = async () => {
+            const docSnap = await getDocs(db);
+            docSnap.forEach((querySnapshot) => {
+                setEntries(querySnapshot.data().entries);
+                setId(querySnapshot.id);
+            });
+        }
+        
+        const addEntry = async () => {
+            const entriesRef = doc(firestore, "users", id);
+            if(entry > 0){
+            await updateDoc(entriesRef, {
+              'entries': increment(1)
+            })
+            getEntries();
+        }
+    }
+        getEntries();
+        addEntry();
+    }, [entry])
+
+   
+
     return(
         <div>
         <div className="white f3">
-                {'Nilly, your current rank is...'}
+                {`${name}, your current number of entries is...`}
         </div>
         <div className="white f1">
-                {'#1'}
+                 {`#${entries}`}
         </div>
         </div>
 

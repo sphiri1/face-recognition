@@ -9,9 +9,9 @@ import { Component } from 'react';
 import Clarifai from 'clarifai';
 import SignIn from './Componenets/SignIn/SignIn';
 import Register from './Componenets/Register/Register';
-
+ 
 const app = new Clarifai.App({
-  apiKey: 'API-KEY HERE'
+  apiKey: 'daa8741eea4f429b9f3efdd4dc7c5061'
 });
 
 class App extends Component{
@@ -22,7 +22,8 @@ class App extends Component{
       ImageUrl: ``,
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      entry:0
     }
    }
 
@@ -47,8 +48,25 @@ class App extends Component{
     this.setState({input: event.target.value});
    }
 
+//    getDocumentId = async () => {
+//     const docSnap = await getDocs(db);
+//     docSnap.forEach((querySnapshot) => {
+//         this.setState({id: querySnapshot.data()});
+//     });
+// } 
+  //  updateEntries = async () =>{
+  //   this.getDocumentId();
+  //   console.log(this.state.id + " hey");
+  //   const entriesRef = doc(firestore, "users", this.state.id);
+  //   await updateDoc(entriesRef, {
+  //     'entries': increment(1)
+  //   })
+  //  }
+
    onButtonSubmit = () =>{
     this.setState({ImageUrl: this.state.input});
+    this.setState({entry: this.state.entry + 1});
+
     app.models.predict({
       id: "face-detection",
      version: "6dc7e46bc9124c5c8824be4822abe105"
@@ -76,10 +94,11 @@ class App extends Component{
       bg={true}/>
      <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
      {
-        route === 'home'
+        route === 'home' 
       ? <div>
         <Logo/>
-        <Rank />
+        <Rank 
+         entry={this.state.entry}/>
         <ImageLinkForm 
          onInputChange={this.onInputChange} 
          onButtonSubmit={this.onButtonSubmit}/>
